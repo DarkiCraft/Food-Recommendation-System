@@ -20,3 +20,5 @@ data/processed/
 
 # Helper
 .DS_Store
+
+system.log

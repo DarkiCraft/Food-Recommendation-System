@@ -76,14 +76,18 @@ Advanced models are only introduced if they **reduce implementation effort** or 
 6. **Feedback Loop**
    - User interactions with recommended items are logged
    - New data is included in the next training cycle
-   - Model is retrained periodically (e.g., daily or manually)### Recommendation Strategy
+   - Model is retrained periodically (e.g., daily or manually)
+
+### Recommendation Strategy
 
 The system supports multiple strategies that can be switched or compared:
 - Personalized (collaborative filtering)
 - Content-based (similar cuisine or price)
 - Popular / trending (baseline)
 
-This allows qualitative comparison of recommendation quality and demonstrates extensibility without additional complexity.### Why This Design
+This allows qualitative comparison of recommendation quality and demonstrates extensibility without additional complexity.
+
+### Why This Design
 
 - **Simple models, strong architecture:** avoids overengineering
 - **Explainable:** embeddings and similarities can be visualized
@@ -96,7 +100,7 @@ This allows qualitative comparison of recommendation quality and demonstrates ex
 
 The core recommendation model is **Neural Collaborative Filtering (NCF)**, which extends traditional matrix factorization by learning user–item interactions through a shallow neural network.
 
-In this system, users and items are represented as embedding vectors. These embeddings are combined (via concatenation or element-wise product) and passed through a small multi-layer perceptron to predict user preference.**Why NCF was chosen as the primary model:**
+In this system, users and items are represented as embedding vectors. These embeddings are combined (via concatenation or element-wise product) and passed through a small multi-layer perceptron to predict user preference. **Why NCF was chosen as the primary model:**
 - Builds directly on matrix factorization concepts while being more expressive
 - Easy to implement using modern deep learning libraries
 - Demonstrates use of neural models without excessive complexity
@@ -140,15 +144,6 @@ A popularity-based recommender is included as a non-personalized baseline:
 - Provides a point of comparison for evaluation
 - Acts as a safe fallback when user data is unavailable
 
-### Summary of Tradeoffs
-
-| Aspect | Choice | Reasoning |
-||||
-| Primary model | Neural Collaborative Filtering | Expressive yet manageable |
-| Supporting model | Matrix Factorization | Simplicity and comparison |
-| Feedback type | Implicit | Matches real-world behavior |
-| Cold start | Content-based | Simple and effective |
-| Model depth | Shallow neural network | Avoid unnecessary complexity |
 ## Implementation
 
 This section outlines a concrete and lightweight implementation plan aligned with the project’s prototype nature. The goal is to keep the system **fully implementable**, while avoiding unnecessary production complexity.### Data Storage
@@ -192,7 +187,9 @@ If a rating exists for a user–item pair:
 - The rating is normalized (e.g., 1–5 → 0–1)
 - It is incorporated into the training signal as an additional feature or increased interaction weight
 
-This allows the model to benefit from explicit feedback **without depending on it**.### Model Training Workflow
+This allows the model to benefit from explicit feedback **without depending on it**.
+
+### Model Training Workflow
 
 1. Aggregate interaction and rating data into a unified training dataset
 2. Encode users and items as integer indices
@@ -205,7 +202,9 @@ This allows the model to benefit from explicit feedback **without depending on i
 4. Train supporting matrix factorization model for comparison
 5. Persist learned embeddings and model weights to disk
 
-Training is performed offline and re-run periodically or manually.### Recommendation Generation (Online)
+Training is performed offline and re-run periodically or manually.
+
+### Recommendation Generation (Online)
 
 When a user requests the landing page:
 1. Load trained NCF model and embeddings
@@ -226,7 +225,9 @@ The Streamlit UI provides:
 - Post-order rating prompt (optional)
 - Ability to switch between recommendation strategies (personalized vs popular)
 
-Ratings are displayed to inform users and simultaneously logged to improve future recommendations.### Feedback Loop
+Ratings are displayed to inform users and simultaneously logged to improve future recommendations.
+
+### Feedback Loop
 
 All user actions are continuously logged:
 - Recommendation impressions
